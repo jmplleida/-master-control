@@ -407,8 +407,7 @@ function doLogin() {
   if (val === 'NachiDacia2342') {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('main').style.display = 'block';
-    if (typeof initApp === 'function') initApp();
-    else window.addEventListener('firebase_ready', function(){ initApp(); });
+    if (window._firebase_ready && typeof window.initApp === 'function') { window.initApp(); } else { window.addEventListener('firebase_ready', function(){ if(typeof window.initApp==='function') window.initApp(); }); }
   } else {
     document.getElementById('login-err').style.display = 'block';
     document.getElementById('clave-input').value = '';
@@ -453,6 +452,7 @@ window._remove = remove;
 window._update = update;
 window._PINTORS_REF = PINTORS_REF;
 window._firebase_ready = true;
+window.initApp = initApp;
 window.dispatchEvent(new Event('firebase_ready'));
 </script>
 
@@ -955,6 +955,7 @@ function eliminarPack(packId) {
 }
 window.eliminarPack = eliminarPack;
 
+window.switchTab = switchTab;
 // ─── MASTER KEY disponible para login ────────────────────────────────────────
 window.MASTER_KEY = 'NachiDacia2342';
 </script>
@@ -999,12 +1000,4 @@ window.MASTER_KEY = 'NachiDacia2342';
     </div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="cerrarModalCode()">Cerrar</button>
-      <button class="btn-save" onclick="copiarCode()" style="background:var(--green);color:#0a0a0f;">
-        📋 Copiar código
-      </button>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
+      <button class="btn-save" onclick="c
