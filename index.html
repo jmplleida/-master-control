@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="PintorApp">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%232563eb'/%3E%3Ctext y='135' x='90' text-anchor='middle' font-size='110' font-family='Arial'%3E%F0%9F%96%8C%3C/text%3E%3C/svg%3E">
 <title>Pressupostador Pintor</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
@@ -403,7 +405,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
         <div class="header-sub" id="header-sub">Pintor</div>
       </div>
     </div>
-    <button class="btn-settings" onclick="resetApp()" title="Canviar dades">⚙</button>
+    <div style="display:flex;gap:6px;">
+      <button id="btn-install" onclick="triggerInstall()" title="Instal·lar app"
+        style="background:rgba(255,255,255,0.2);border:none;color:white;
+        width:36px;height:36px;border-radius:9px;font-size:18px;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;">🖌</button>
+      <button class="btn-settings" onclick="resetApp()" title="Canviar dades">⚙</button>
+    </div>
   </div>
 
   <div class="robert-bar">
@@ -1107,49 +1115,97 @@ if (!PINTOR_ID) {
 </div>
 
 <script>
-// PWA Install
 var deferredPrompt = null;
+var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
 window.addEventListener('beforeinstallprompt', function(e) {
   e.preventDefault();
   deferredPrompt = e;
-  // Show banner after 3 seconds if not already installed
-  setTimeout(function() {
-    if (!window.matchMedia('(display-mode: standalone)').matches) {
-      document.getElementById('pwa-banner').style.display = 'block';
-    }
-  }, 3000);
+  document.getElementById('pwa-banner').style.display = 'block';
+});
+
+window.addEventListener('appinstalled', function() {
+  document.getElementById('pwa-banner').style.display = 'none';
+  showToast('✅ App instal·lada!');
 });
 
 function installPWA() {
-  var banner = document.getElementById('pwa-banner');
   if (deferredPrompt) {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function(result) {
+    deferredPrompt.userChoice.then(function(r) {
       deferredPrompt = null;
-      banner.style.display = 'none';
-      if (result.outcome === 'accepted') {
-        showToast('✅ App instal·lada a la pantalla d'inici!');
-      }
+      document.getElementById('pwa-banner').style.display = 'none';
     });
   }
 }
 
-// iOS detection
-var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-var isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-if (isIOS && !isInStandaloneMode) {
-  setTimeout(function() {
-    document.getElementById('ios-banner').style.display = 'block';
-  }, 4000);
+function triggerInstall() {
+  if (isStandalone) {
+    showToast('✅ Ja està instal·lada!');
+    return;
+  }
+  if (deferredPrompt) {
+    installPWA();
+  } else if (isIOS) {
+    var b = document.getElementById('ios-banner');
+    b.style.display = b.style.display === 'block' ? 'none' : 'block';
+  } else {
+    // Show manual instructions
+    showInstallModal();
+  }
 }
 
-// If already installed as PWA, hide banners
-if (isInStandaloneMode) {
-  document.getElementById('pwa-banner').style.display = 'none';
-  document.getElementById('ios-banner').style.display = 'none';
+function showInstallModal() {
+  var m = document.getElementById('install-modal');
+  if (m) m.style.display = 'flex';
+}
+
+if (!isStandalone && isIOS) {
+  setTimeout(function(){
+    document.getElementById('ios-banner').style.display = 'block';
+  }, 2000);
 }
 </script>
+
+<!-- Install Modal (for browsers without beforeinstallprompt) -->
+<div id="install-modal" style="display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,0.85);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#1a1a26;border:1px solid #2a2a3a;border-radius:20px;
+    padding:28px 24px;max-width:380px;width:100%;text-align:center;">
+    <div style="font-size:52px;margin-bottom:12px;">🖌</div>
+    <div style="font-family:'DM Sans',sans-serif;font-weight:700;font-size:18px;
+      color:#f0f0f8;margin-bottom:8px;">Instal·la PintorApp</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:#6b6b8a;margin-bottom:20px;">
+      Afegeix-la a la pantalla d'inici per accés directe</div>
+    
+    <div style="background:#0a0a0f;border-radius:12px;padding:16px;margin-bottom:16px;text-align:left;">
+      <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#4fc3f7;
+        font-weight:700;margin-bottom:10px;">📱 ANDROID (Chrome)</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#ccccee;line-height:1.8;">
+        1. Toca els <strong style="color:white;">⋮ tres punts</strong> (dalt a la dreta)<br>
+        2. Toca <strong style="color:white;">"Afegir a la pantalla d'inici"</strong><br>
+        3. Confirma tocant <strong style="color:#00e676;">Afegir</strong>
+      </div>
+    </div>
+    
+    <div style="background:#0a0a0f;border-radius:12px;padding:16px;margin-bottom:20px;text-align:left;">
+      <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#4fc3f7;
+        font-weight:700;margin-bottom:10px;">🍎 iPHONE / iPAD (Safari)</div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:#ccccee;line-height:1.8;">
+        1. Toca <strong style="color:white;">⬆ Compartir</strong> (baix al centre)<br>
+        2. Toca <strong style="color:white;">"Afegir a pantalla d'inici"</strong><br>
+        3. Toca <strong style="color:#00e676;">Afegir</strong> a dalt a la dreta
+      </div>
+    </div>
+    
+    <button onclick="document.getElementById('install-modal').style.display='none'"
+      style="width:100%;padding:13px;background:#2563eb;color:white;border:none;
+      border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;
+      font-family:'DM Sans',sans-serif;">
+      ✓ Entès
+    </button>
+  </div>
+</div>
 </body>
 </html>
