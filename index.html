@@ -422,6 +422,38 @@ function doLogout() {
 }
 </script>
 <!-- Firebase Compat (no módulos) -->
+<script>
+// Funciones globales - disponibles desde onclick
+function doLogin() {
+  var val = document.getElementById('clave-input').value.trim();
+  if (val === 'NachiDacia2342') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    if (typeof initApp === 'function') { initApp(); }
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('clave-input').value = '';
+  }
+}
+function doLogout() {
+  document.getElementById('main').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('clave-input').value = '';
+  document.getElementById('login-err').style.display = 'none';
+}
+// Stub functions - will be overwritten when scripts load
+function abrirModal(id) { window._abrirModal && window._abrirModal(id); }
+function abrirModalPack() { window._abrirModalPack && window._abrirModalPack(); }
+function cerrarModal() { window._cerrarModal && window._cerrarModal(); }
+function cerrarModalPack() { window._cerrarModalPack && window._cerrarModalPack(); }
+function cerrarMsgModal() { window._cerrarMsgModal && window._cerrarMsgModal(); }
+function cerrarModalCode() { window._cerrarModalCode && window._cerrarModalCode(); }
+function guardarPintor() { window._guardarPintor && window._guardarPintor(); }
+function generarPack() { window._generarPack && window._generarPack(); }
+function enviarMensaje() { window._enviarMensaje && window._enviarMensaje(); }
+function copiarCode() { window._copiarCode && window._copiarCode(); }
+function switchTab(t) { window._switchTab && window._switchTab(t); }
+</script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script>
@@ -644,10 +676,10 @@ function abrirModal(id) {
   }
   document.getElementById('modal-add').classList.add('open');
 }
-window.abrirModal = abrirModal;
+window.abrirModal = abrirModal; window._abrirModal = abrirModal;
 
 function cerrarModal() { document.getElementById('modal-add').classList.remove('open'); }
-window.cerrarModal = cerrarModal;
+window.cerrarModal = cerrarModal; window._cerrarModal = cerrarModal;
 
 function guardarPintor() {
   var nom = document.getElementById('m-nom').value.trim();
@@ -670,7 +702,7 @@ function guardarPintor() {
   cerrarModal();
   showToast(editingId ? '✅ Pintor actualizado' : '✅ Pintor añadido');
 }
-window.guardarPintor = guardarPintor;
+window.guardarPintor = guardarPintor; window._guardarPintor = guardarPintor;
 
 function editarPintor(id) { abrirModal(id); }
 window.editarPintor = editarPintor;
@@ -693,7 +725,7 @@ function abrirMsgModal(id) {
 window.abrirMsgModal = abrirMsgModal;
 
 function cerrarMsgModal() { document.getElementById('modal-msg').classList.remove('open'); }
-window.cerrarMsgModal = cerrarMsgModal;
+window.cerrarMsgModal = cerrarMsgModal; window._cerrarMsgModal = cerrarMsgModal;
 
 function enviarMensaje() {
   var txt = document.getElementById('msg-texto').value.trim();
@@ -701,7 +733,7 @@ function enviarMensaje() {
   cerrarMsgModal();
   showToast(txt ? '💬 Mensaje enviado' : '🗑 Mensaje eliminado');
 }
-window.enviarMensaje = enviarMensaje;
+window.enviarMensaje = enviarMensaje; window._enviarMensaje = enviarMensaje;
 
 function showToast(msg) {
   var t = document.getElementById('toast');
@@ -746,12 +778,12 @@ function abrirModalPack() {
   document.getElementById('p-tel').value = '';
   document.getElementById('modal-pack').classList.add('open');
 }
-window.abrirModalPack = abrirModalPack;
+window.abrirModalPack = abrirModalPack; window._abrirModalPack = abrirModalPack;
 
 function cerrarModalPack() {
   document.getElementById('modal-pack').classList.remove('open');
 }
-window.cerrarModalPack = cerrarModalPack;
+window.cerrarModalPack = cerrarModalPack; window._cerrarModalPack = cerrarModalPack;
 
 function generarPack() {
   var cliente = document.getElementById('p-cliente').value.trim();
@@ -788,7 +820,7 @@ function generarPack() {
   showToast('✅ Pack generado con ' + num + ' códigos para ' + cliente);
   switchTab('packs');
 }
-window.generarPack = generarPack;
+window.generarPack = generarPack; window._generarPack = generarPack;
 
 function renderPackStats() {
   var total_packs = Object.keys(packs).length;
@@ -893,7 +925,7 @@ function verCodigo(packId, code) {
 window.verCodigo = verCodigo;
 
 function cerrarModalCode() { document.getElementById('modal-code').classList.remove('open'); }
-window.cerrarModalCode = cerrarModalCode;
+window.cerrarModalCode = cerrarModalCode; window._cerrarModalCode = cerrarModalCode;
 
 function copiarCode() {
   navigator.clipboard.writeText(window._currentCode || '').then(function() {
@@ -901,7 +933,7 @@ function copiarCode() {
     cerrarModalCode();
   });
 }
-window.copiarCode = copiarCode;
+window.copiarCode = copiarCode; window._copiarCode = copiarCode;
 
 function copiarTodos(packId) {
   var codigos = packs[packId].codigos;
@@ -946,7 +978,7 @@ function eliminarPack(packId) {
 }
 window.eliminarPack = eliminarPack;
 
-window.switchTab = switchTab;
+window.switchTab = switchTab; window._switchTab = switchTab;
 // ─── MASTER KEY disponible para login ────────────────────────────────────────
 window.MASTER_KEY = 'NachiDacia2342';
 </script>
