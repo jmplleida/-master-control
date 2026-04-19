@@ -75,7 +75,7 @@ body{font-family:Arial,sans-serif;background:#0a0a0f;color:#f0f0f8;min-height:10
     <h1>CONSOLA MASTER</h1>
     <p>PintorApp - Panel de control</p>
     <input type="password" id="iClave" placeholder="Clave secreta">
-    <button class="btnY" onclick="login()">ENTRAR</button>
+    <button class="btnY">ENTRAR</button>
     <div id="err">Clave incorrecta</div>
   </div>
 </div>
@@ -83,18 +83,18 @@ body{font-family:Arial,sans-serif;background:#0a0a0f;color:#f0f0f8;min-height:10
 <div id="pgMain" style="display:block">
   <div class="topbar">
     <h2>CONSOLA MASTER</h2>
-    <button class="btnR" onclick="logout()">Salir</button>
+    <button class="btnR">Salir</button>
   </div>
   <div class="tabs">
-    <button class="tab sel" id="t1" onclick="tab(1)">Pintores</button>
-    <button class="tab" id="t2" onclick="tab(2)">Packs</button>
+    <button class="tab sel" id="t1">Pintores</button>
+    <button class="tab" id="t2">Packs</button>
   </div>
   <div class="wrap" id="v1">
-    <div class="hdr"><span>Pintores registrados</span><button class="btnG" onclick="openP(null)">+ Nuevo pintor</button></div>
+    <div class="hdr"><span>Pintores registrados</span><button class="btnG">+ Nuevo pintor</button></div>
     <div id="lP"><div class="empty">Conectando...</div></div>
   </div>
   <div class="wrap" id="v2" style="display:none">
-    <div class="hdr"><span>Packs de licencias</span><button class="btnG" onclick="openPk()">+ Nuevo pack</button></div>
+    <div class="hdr"><span>Packs de licencias</span><button class="btnG">+ Nuevo pack</button></div>
     <div id="lK"><div class="empty">Sin packs</div></div>
   </div>
 </div>
@@ -122,7 +122,7 @@ body{font-family:Arial,sans-serif;background:#0a0a0f;color:#f0f0f8;min-height:10
       </select>
     </div>
     <div class="f"><label>Mensaje</label><textarea id="pM" placeholder="Bienvenido..."></textarea></div>
-    <div class="mbtns"><button class="bC" onclick="closeP()">Cancelar</button><button class="bS" onclick="saveP()">Guardar</button></div>
+    <div class="mbtns"><button class="bC">Cancelar</button><button class="bS">Guardar</button></div>
   </div>
 </div>
 
@@ -131,7 +131,7 @@ body{font-family:Arial,sans-serif;background:#0a0a0f;color:#f0f0f8;min-height:10
     <h3 style="color:#4cf">Mensaje</h3>
     <div class="f"><label>Pintor</label><input type="text" id="mN" disabled style="opacity:.5"></div>
     <div class="f"><label>Mensaje</label><textarea id="mT" placeholder="Aviso..."></textarea></div>
-    <div class="mbtns"><button class="bC" onclick="closeMsg()">Cancelar</button><button class="bS" onclick="sendMsg()" style="background:#4cf;color:#000">Enviar</button></div>
+    <div class="mbtns"><button class="bC">Cancelar</button><button class="bS" style="background:#4cf;color:#000">Enviar</button></div>
   </div>
 </div>
 
@@ -142,7 +142,7 @@ body{font-family:Arial,sans-serif;background:#0a0a0f;color:#f0f0f8;min-height:10
     <div class="f"><label>Telefono</label><input type="tel" id="kT" placeholder="973 000 392"></div>
     <div class="f"><label>Licencias</label><select id="kN"><option value="10">10</option><option value="20">20</option><option value="30">30</option></select></div>
     <div class="f"><label>Duracion</label><select id="kD"><option value="12" selected>12 meses</option><option value="6">6 meses</option><option value="24">24 meses</option></select></div>
-    <div class="mbtns"><button class="bC" onclick="closePk()">Cancelar</button><button class="bS" onclick="savePk()">Generar</button></div>
+    <div class="mbtns"><button class="bC">Cancelar</button><button class="bS">Generar</button></div>
   </div>
 </div>
 
@@ -218,8 +218,8 @@ function showP(){
     var sl=s==='act'?'ACTIVO':s==='exp'?'CADUCADO':'INACTIVO';
     var sc=s==='act'?'on':'off';
     var tb=s==='act'?
-      '<button class="b2" onclick="tog(''+id+'')">Desactivar</button>':
-      '<button class="b1" onclick="tog(''+id+'')">Activar</button>';
+      '<button class="b2">Desactivar</button>':
+      '<button class="b1">Activar</button>';
     h+='<div class="card '+s+'">'+
       '<div class="ctop">'+
         '<div class="av" style="background:'+(p.color||'#2563eb')+'">'+ini+'</div>'+
@@ -230,9 +230,9 @@ function showP(){
       '<div class="cm">Tel: <b>'+(p.tel||'-')+'</b> Cad: <b>'+(p.caducidad_meses>0?p.caducidad_meses+'m':'inf')+'</b></div>'+
       (p.mensaje?'<div style="background:#0a0a1f;border-left:2px solid #4cf;padding:6px;font-size:12px;color:#4cf;margin-bottom:8px">'+p.mensaje+'</div>':'')+
       '<div class="cbtns">'+tb+
-        '<button class="b3" onclick="openMsg(''+id+'')">Mensaje</button>'+
-        '<button class="b4" onclick="openP(''+id+'')">Editar</button>'+
-        '<button class="b2" onclick="delP(''+id+'')">Borrar</button>'+
+        '<button class="b3">Mensaje</button>'+
+        '<button class="b4">Editar</button>'+
+        '<button class="b2">Borrar</button>'+
       '</div></div>';
   });
   l.innerHTML=h;
@@ -326,8 +326,8 @@ function showPK(){
     h+='<div class="pcard"><div style="font-weight:bold;color:#f5c800;margin-bottom:6px">'+pk.cliente+' - '+lib.length+'/'+cks.length+' libres</div>'+
       '<div class="codes">'+ch+'</div>'+
       '<div style="display:flex;gap:6px;margin-top:8px">'+
-        '<button class="b3" onclick="copyLib(''+pid+'')">Copiar libres</button>'+
-        '<button class="b2" onclick="delPk(''+pid+'')">Borrar</button>'+
+        '<button class="b3">Copiar libres</button>'+
+        '<button class="b2">Borrar</button>'+
       '</div></div>';
   });
   l.innerHTML=h;
