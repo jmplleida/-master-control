@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" translate="no">
 <head>
 <meta charset="UTF-8">
+<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PintorApp · Consola Master</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -317,7 +318,7 @@ function renderPintores(){
         document.getElementById('f-color').value=p.color||'#2563eb';document.getElementById('f-cad').value=p.caducidad_meses||12;
         document.getElementById('f-msg').value=p.mensaje||'';document.getElementById('m-pintor').classList.add('open');
       }
-      else if(act==='del'){if(confirm('¿Eliminar a '+pintores[id].nom+'?')){db.ref('pintorapp/pintores/'+id).remove();toast('🗑 Eliminado');}}
+      else if(act==='del'){if(confirm('¿Eliminar a '+pintores[id].nom+'?')){db.ref('pintorapp/pintores/'+id).remove();toast('Eliminado');}}
     };
   });
 }
@@ -333,7 +334,7 @@ document.getElementById('btn-np').onclick=function(){
 document.getElementById('f-cancel').onclick=function(){document.getElementById('m-pintor').classList.remove('open');};
 document.getElementById('f-save').onclick=function(){
   var nom=document.getElementById('f-nom').value.trim();
-  if(!nom){toast('⚠️ Escribe el nombre');return;}
+  if(!nom){toast('Escribe el nombre');return;}
   var id=editId||'pintor_'+Date.now();
   var ex=(editId&&pintores[editId])||{};
   db.ref('pintorapp/pintores/'+id).set({
@@ -355,7 +356,7 @@ document.getElementById('f-save').onclick=function(){
 document.getElementById('msg-cancel').onclick=function(){document.getElementById('m-msg').classList.remove('open');};
 document.getElementById('msg-save').onclick=function(){
   db.ref('pintorapp/pintores/'+msgId).update({mensaje:document.getElementById('msg-t').value.trim()});
-  document.getElementById('m-msg').classList.remove('open');toast('💬 Mensaje enviado');
+  document.getElementById('m-msg').classList.remove('open');toast('Mensaje enviado');
 };
 
 // PACKS
@@ -366,7 +367,7 @@ document.getElementById('btn-pk').onclick=function(){
 document.getElementById('pk-cancel').onclick=function(){document.getElementById('m-pack').classList.remove('open');};
 document.getElementById('pk-save').onclick=function(){
   var cli=document.getElementById('pk-cli').value.trim();
-  if(!cli){toast('⚠️ Escribe el cliente');return;}
+  if(!cli){toast('Escribe el cliente');return;}
   var num=parseInt(document.getElementById('pk-num').value);
   var dur=parseInt(document.getElementById('pk-dur').value);
   var codes={};
@@ -376,7 +377,7 @@ document.getElementById('pk-save').onclick=function(){
     num_total:num,duracion_meses:dur,creado:new Date().toISOString(),codigos:codes
   });
   document.getElementById('m-pack').classList.remove('open');
-  toast('✅ Pack con '+num+' códigos generado');
+  toast('Pack con '+num+' códigos generado');
   document.getElementById('tab2').click();
 };
 
@@ -421,20 +422,20 @@ function renderPacks(){
       var pk=packs[pid];var cs=pk.codigos||{};
       var lib=Object.keys(cs).filter(function(k){return cs[k].estado==='libre';});
       if(act==='copy'){
-        if(!lib.length){toast('⚠️ Sin libres');return;}
+        if(!lib.length){toast('Sin libres');return;}
         var txt='🎟 CÓDIGOS PINTORAPP — '+pk.cliente+'\n'+'━'.repeat(20)+'\n';
         lib.forEach(function(c,i){txt+=(i+1)+'. '+c+'\n';});
         txt+='━'.repeat(20)+'\nVálidos '+pk.duracion_meses+' meses · wa.me/'+WA;
-        navigator.clipboard.writeText(txt).then(function(){toast('📋 '+lib.length+' códigos copiados');});
+        navigator.clipboard.writeText(txt).then(function(){toast(lib.length+' codigos copiados');});
       }else if(act==='wa'){
-        if(!lib.length){toast('⚠️ Sin libres');return;}
-        var msg='🎨 *PINTORAPP*\n🏪 *'+pk.cliente+'*\n🎟 '+lib.length+' llicències · '+pk.duracion_meses+' mesos\n\n';
+        if(!lib.length){toast('Sin libres');return;}
+        var msg='PINTORAPP\n'+pk.cliente+'*\n🎟 '+lib.length+' llicències · '+pk.duracion_meses+' mesos\n\n';
         lib.forEach(function(c,i){msg+=(i+1)+'. '+c+'\n';});
-        msg+='\n❓ wa.me/'+WA;
+        msg+='\nwa.me/'+WA;
         var tel=pk.tel?(pk.tel.replace(/\D/g,''):''):'';
         window.open('https://wa.me/'+(tel?'34'+tel:'')+'?text='+encodeURIComponent(msg),'_blank');
       }else if(act==='del'){
-        if(confirm('¿Eliminar pack de '+pk.cliente+'?')){db.ref('pintorapp/packs/'+pid).remove();toast('🗑 Eliminado');renderPacks();}
+        if(confirm('¿Eliminar pack de '+pk.cliente+'?')){db.ref('pintorapp/packs/'+pid).remove();toast('Eliminado');renderPacks();}
       }
     };
   });
